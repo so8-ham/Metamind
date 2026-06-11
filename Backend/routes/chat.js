@@ -1,7 +1,7 @@
 import express from "express";
 import Thread from "../models/Thread.js"
 const router = express.Router();
-import getOpenAIAPIResponce from "../utils/openai.js";
+import getMistralAPIResponse from "../utils/mistral.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 
 
@@ -58,24 +58,31 @@ router.post("/chat", authMiddleware, async (req, res) => {
   }
   try {
     let thread = await Thread.findOne({ threadId, userId: req.user._id });
+    let messagesForModel;
+
     if (!thread) {
-      //create new thread in Db
+      // create new thread in Db
       thread = new Thread({
         userId: req.user._id,
         threadId,
         title: message,
         messages: [{ role: "User", content: message }],
-      })
+      });
+      messagesForModel = [{ role: "user", content: message }];
     } else {
       thread.messages.push({ role: "User", content: message });
+      messagesForModel = thread.messages.map((msg) => ({
+        role: msg.role.toLowerCase(),
+        content: msg.content,
+      }));
     }
-    const reply = await getOpenAIAPIResponce(message);
+
+    const reply = await getMistralAPIResponse(messagesForModel);
 
     thread.messages.push({ role: "assistant", content: reply });
     thread.updatedAt = new Date();
     await thread.save();
-    res.json({ reply: reply });
-
+    res.json({ reply });
   } catch (e) {
     console.log(e);
     res.status(500).json({ error: "something went wrong" });

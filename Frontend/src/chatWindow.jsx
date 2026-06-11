@@ -5,7 +5,7 @@ import { AuthContext } from "./AuthContext.jsx";
 import { useContext, useState, useEffect } from "react";
 import { ScaleLoader } from "react-spinners";
 function ChatWindow() {
-  const { prompt, setPrompt, reply, setReply, currentThreadId, prevchats, setprevChats } = useContext(MyContext);
+  const { prompt, setPrompt, reply, setReply, currentThreadId, prevchats, setprevChats, newchat, setnewChat } = useContext(MyContext);
   const { token } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
 

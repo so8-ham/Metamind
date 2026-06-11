@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { body, validationResult } from "express-validator";
 import User from "../models/User.js";
 import authMiddleware from "../middleware/authMiddleware.js";
+import mongoose from "mongoose";
 
 const router = express.Router();
 
@@ -26,6 +27,9 @@ router.post(
             .withMessage("Password must be at least 6 characters long")
     ],
     async (req, res) => {
+        if (mongoose.connection.readyState !== 1) {
+            return res.status(503).json({ error: "Database not connected" });
+        }
         // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -50,6 +54,8 @@ router.post(
 
             await user.save();
 
+            console.log("User created:", { id: user._id, email: user.email });
+
             // Generate token
             const token = generateToken(user._id);
 
@@ -63,8 +69,9 @@ router.post(
                 }
             });
         } catch (error) {
-            console.error("Signup error:", error);
-            res.status(500).json({ error: "Server error during registration" });
+            console.error("Signup error:", error && (error.stack || error));
+            // Return error message for debugging (remove in production)
+            res.status(500).json({ error: "Server error during registration", message: error.message });
         }
     }
 );
@@ -79,6 +86,9 @@ router.post(
         body("password").notEmpty().withMessage("Password is required")
     ],
     async (req, res) => {
+        if (mongoose.connection.readyState !== 1) {
+            return res.status(503).json({ error: "Database not connected" });
+        }
         // Check for validation errors
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
@@ -115,8 +125,9 @@ router.post(
                 }
             });
         } catch (error) {
-            console.error("Login error:", error);
-            res.status(500).json({ error: "Server error during login" });
+            console.error("Login error:", error && (error.stack || error));
+            // Return error message for debugging (remove in production)
+            res.status(500).json({ error: "Server error during login", message: error.message });
         }
     }
 );

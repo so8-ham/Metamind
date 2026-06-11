@@ -1,0 +1,154 @@
+/* Global Responsive Styles */
+
+* {
+    box-sizing: border-box;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+/* Responsive Font Sizes */
+body {
+    font-size: clamp(14px, 2.5vw, 16px);
+}
+
+h1 {
+    font-size: clamp(24px, 6vw, 32px);
+}
+
+h2 {
+    font-size: clamp(20px, 5vw, 28px);
+}
+
+h3 {
+    font-size: clamp(18px, 4vw, 24px);
+}
+
+h4 {
+    font-size: clamp(16px, 3.5vw, 20px);
+}
+
+h5 {
+    font-size: clamp(14px, 3vw, 18px);
+}
+
+h6 {
+    font-size: clamp(12px, 2.5vw, 16px);
+}
+
+/* Responsive Buttons */
+button {
+    min-height: 44px;
+    min-width: 44px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: clamp(12px, 2.5vw, 16px);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Responsive Images */
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Responsive Input Fields */
+input, textarea, select {
+    min-height: 44px;
+    font-size: clamp(12px, 2.5vw, 16px);
+    padding: clamp(8px, 2vw, 12px) clamp(12px, 3vw, 16px);
+}
+
+/* Responsive Scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* Mobile: < 480px */
+@media (max-width: 479px) {
+    body {
+        margin: 0;
+        padding: 0;
+    }
+    
+    input, textarea, select, button {
+        font-size: 16px;
+    }
+}
+
+/* Tablet: 480px - 768px */
+@media (min-width: 480px) and (max-width: 767px) {
+    body {
+        font-size: 14px;
+    }
+}
+
+/* Desktop: 768px+ */
+@media (min-width: 768px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+/* Large Desktop: 1440px+ */
+@media (min-width: 1440px) {
+    body {
+        font-size: 16px;
+    }
+}
+
+/* High DPI Screens (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    body {
+        -webkit-font-smoothing: subpixel-antialiased;
+    }
+}
+
+/* Landscape Orientation */
+@media (orientation: landscape) and (max-height: 500px) {
+    body {
+        font-size: 14px;
+    }
+    
+    h1 {
+        font-size: clamp(18px, 4vw, 24px);
+    }
+}
+
+/* Touch Device Optimization */
+@media (hover: none) and (pointer: coarse) {
+    button, a {
+        min-width: 48px;
+        min-height: 48px;
+        padding: clamp(8px, 2vw, 12px);
+    }
+}

@@ -10,12 +10,22 @@ const app = express();
 const PORT = 8080;
 
 const connectDB = async () => {
-    try {
-        await mongoose.connect(process.env.MONGODB_URI);
-        console.log("connected with DB")
-    } catch (e) {
-        console.log("connection failed with DB", e);
+    const candidates = [];
+    if (process.env.MONGODB_URI) candidates.push(process.env.MONGODB_URI);
+    // local fallback
+    candidates.push("mongodb://127.0.0.1:27017/Metamind");
+
+    for (const uri of candidates) {
+        try {
+            await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
+            console.log("connected with DB:", uri);
+            return;
+        } catch (e) {
+            console.log(`connection failed for ${uri}:`, e.message || e);
+        }
     }
+
+    console.log("Could not connect to any MongoDB instance. Routes that require DB will return 503.");
 }
 
 app.use(express.json());
@@ -23,6 +33,10 @@ app.use(cors());
 
 app.use("/api/auth", authRoute);
 app.use("/api", chatRoute);
+
+app.get('/health', (req, res) => {
+    res.json({ dbState: mongoose.connection.readyState });
+});
 
 connectDB();
 

@@ -11,15 +11,12 @@ function Chat() {
   useEffect(() => {
     if (!prevchats?.length || !reply) return;
 
-    const content = reply.split("");
-
     let idx = 0;
     const interval = setInterval(() => {
-      setlatestReply(content.slice(0, idx + 1).join(" "));
-
+      setlatestReply(reply.slice(0, idx + 1));
       idx++;
-      if (idx >= content.length) clearInterval(interval);
-    }, 40)
+      if (idx >= reply.length) clearInterval(interval);
+    }, 30)
 
     return () => clearInterval(interval);
 
@@ -38,8 +35,10 @@ function Chat() {
               <div className={Chat.role === "user" ? "userDiv" : "gptDiv"} key={idx}>
                 {
                   Chat.role === "user" ?
-                    <p className="userMessage">{Chat.content}</p> :
-                    <ReactMarkdown rehypePlugins={rehypeHighlight}>{Chat.content}</ReactMarkdown>
+                    <div className="userMessage">{Chat.content}</div> :
+                    <div style={{ width: "100%", maxWidth: "800px" }}>
+                      <ReactMarkdown rehypePlugins={rehypeHighlight}>{Chat.content}</ReactMarkdown>
+                    </div>
                 }
               </div>
             )
@@ -48,7 +47,9 @@ function Chat() {
         {
           latestreply != null &&
           <div className="gptDiv" key={"typing"}>
-            <ReactMarkdown rehypePlugins={rehypeHighlight}>{latestreply}</ReactMarkdown>
+            <div style={{ width: "100%", maxWidth: "800px" }}>
+              <ReactMarkdown rehypePlugins={rehypeHighlight}>{latestreply}</ReactMarkdown>
+            </div>
           </div>
         }
 
