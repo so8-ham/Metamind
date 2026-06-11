@@ -2,6 +2,7 @@ import "./chatWindow.css";
 import Chat from "./chat.jsx";
 import { MyContext } from "./MyContext.jsx";
 import { AuthContext } from "./AuthContext.jsx";
+import API_BASE_URL from "./config";
 import { useContext, useState, useEffect } from "react";
 import { ScaleLoader } from "react-spinners";
 function ChatWindow() {
@@ -23,7 +24,7 @@ function ChatWindow() {
       })
     };
     try {
-      const response = await fetch("http://localhost:8080/api/chat", options);
+      const response = await fetch(`${API_BASE_URL}/api/chat`, options);
       const res = await response.json();
       console.log(res);
       setReply(res.reply);
@@ -39,7 +40,7 @@ function ChatWindow() {
       if (!currentThreadId || !token) return;
 
       try {
-        const response = await fetch(`http://localhost:8080/api/thread/${currentThreadId}`, {
+        const response = await fetch(`${API_BASE_URL}/api/thread/${currentThreadId}`, {
           headers: {
             "Authorization": `Bearer ${token}`
           }

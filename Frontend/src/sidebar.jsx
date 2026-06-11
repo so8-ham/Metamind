@@ -2,6 +2,7 @@ import "./sidebar.css";
 import { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
 import { AuthContext } from "./AuthContext";
+import API_BASE_URL from "./config";
 function Sidebar() {
   const { allThreads, setallThreads, currentThreadId, setcurrentThreadId } = useContext(MyContext);
   const { user, logout, token } = useContext(AuthContext);
@@ -10,7 +11,7 @@ function Sidebar() {
   };
   const getAllThreads = async () => {
     try {
-      const response = await fetch("http://localhost:8080/api/thread", {
+      const response = await fetch(`${API_BASE_URL}/api/thread`, {
         headers: {
           "Authorization": `Bearer ${token}`
         }

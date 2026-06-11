@@ -1,4 +1,5 @@
 import { createContext, useState, useEffect } from "react";
+import API_BASE_URL from "./config";
 
 export const AuthContext = createContext();
 
@@ -14,7 +15,7 @@ export const AuthProvider = ({ children }) => {
             const storedToken = localStorage.getItem("token");
             if (storedToken) {
                 try {
-                    const response = await fetch("http://localhost:8080/api/auth/me", {
+                    const response = await fetch(`${API_BASE_URL}/api/auth/me`, {
                         headers: {
                             "Authorization": `Bearer ${storedToken}`
                         }
@@ -44,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     const signup = async (name, email, password) => {
         setAuthError(null);
         try {
-            const response = await fetch("http://localhost:8080/api/auth/signup", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/signup`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -71,7 +72,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         setAuthError(null);
         try {
-            const response = await fetch("http://localhost:8080/api/auth/login", {
+            const response = await fetch(`${API_BASE_URL}/api/auth/login`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
