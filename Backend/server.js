@@ -29,12 +29,17 @@ const connectDB = async () => {
 }
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // CORS configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+    ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+    : ['http://localhost:3000', 'http://localhost:5173'];
+
+console.log('CORS Allowed Origins:', allowedOrigins);
+
 const corsOptions = {
-    origin: process.env.ALLOWED_ORIGINS 
-        ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
-        : ['http://localhost:3000', 'http://localhost:5173'],
+    origin: allowedOrigins,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -42,15 +47,37 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
+// Request logging middleware
+app.use((req, res, next) => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} - Origin: ${req.get('origin')}`);
+    next();
+});
+
 app.use("/api/auth", authRoute);
 app.use("/api", chatRoute);
 
 app.get('/health', (req, res) => {
-    res.json({ dbState: mongoose.connection.readyState });
+    res.json({ 
+        dbState: mongoose.connection.readyState,
+        dbStatus: ['disconnected', 'connected', 'connecting', 'disconnecting'][mongoose.connection.readyState],
+        allowedOrigins: allowedOrigins
+    });
+});
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+    console.error('[Error]', err);
+    res.status(500).json({ error: err.message || 'Internal Server Error' });
+});
+
+// 404 handler
+app.use((req, res) => {
+    res.status(404).json({ error: 'Route not found' });
 });
 
 connectDB();
 
 app.listen(PORT, () => {
-    console.log(`server running on ${PORT}`);
+    console.log(`server running on PORT ${PORT}`);
+    console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
