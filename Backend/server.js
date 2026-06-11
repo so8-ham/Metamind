@@ -17,15 +17,21 @@ const connectDB = async () => {
 
     for (const uri of candidates) {
         try {
-            await mongoose.connect(uri, { serverSelectionTimeoutMS: 5000 });
-            console.log("connected with DB:", uri);
+            console.log(`[DB] Attempting to connect to: ${uri.substring(0, 50)}...`);
+            await mongoose.connect(uri, { 
+                serverSelectionTimeoutMS: 10000,
+                socketTimeoutMS: 45000,
+                retryWrites: true,
+                w: 'majority'
+            });
+            console.log("[DB] ✓ Connected successfully!");
             return;
         } catch (e) {
-            console.log(`connection failed for ${uri}:`, e.message || e);
+            console.error(`[DB] ✗ Connection failed for ${uri.substring(0, 50)}:`, e.message);
         }
     }
 
-    console.log("Could not connect to any MongoDB instance. Routes that require DB will return 503.");
+    console.error("[DB] ✗ Could not connect to any MongoDB instance. Routes that require DB will return 503.");
 }
 
 app.use(express.json());
