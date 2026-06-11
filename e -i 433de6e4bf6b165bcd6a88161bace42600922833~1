@@ -1,0 +1,24 @@
+[33mcommit 155ba93e543dc550a38741ac1b141ced8655809f[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mdev-branch[m[33m, [m[1;32mmain[m[33m)[m
+Merge: f59977d 433de6e
+Author: soham <sohammandal605@gmail.com>
+Date:   Wed Feb 11 18:33:32 2026 +0530
+
+    Merge branch 'main' of https://github.com/so8-ham/Metamind-chat-bot
+
+[33mcommit 433de6e4bf6b165bcd6a88161bace42600922833[m[33m ([m[1;31morigin/main[m[33m)[m
+Author: Soham Mandal <sohammandal605@gmail.com>
+Date:   Wed Feb 11 18:31:36 2026 +0530
+
+    Initial commit
+
+[33mcommit f59977d4d24cfcfb7738b22614f20aa86667988c[m[33m ([m[1;32mdev[m[33m)[m
+Author: soham <sohammandal605@gmail.com>
+Date:   Wed Feb 11 18:22:13 2026 +0530
+
+    Initial commit of Metamind project
+
+[33mcommit edea838a60ea06b8373ac376d19136a0f106ba08[m
+Author: soham <sohammandal605@gmail.com>
+Date:   Wed Feb 11 18:15:20 2026 +0530
+
+    metamind
